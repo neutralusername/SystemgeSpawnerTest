@@ -59,7 +59,7 @@ func main() {
 
 				SyncRequestTimeoutMs:            5000,
 				TcpTimeoutMs:                    5000,
-				MaxConnectionAttempts:           0,
+				MaxConnectionAttempts:           1,
 				ConnectionAttemptDelayMs:        1000,
 				StopAfterOutgoingConnectionLoss: true,
 				ServerConfig: &Config.TcpServer{
@@ -91,7 +91,7 @@ func main() {
 
 				SyncRequestTimeoutMs:            5000,
 				TcpTimeoutMs:                    5000,
-				MaxConnectionAttempts:           0,
+				MaxConnectionAttempts:           1,
 				ConnectionAttemptDelayMs:        1000,
 				StopAfterOutgoingConnectionLoss: true,
 				ServerConfig: &Config.TcpServer{
