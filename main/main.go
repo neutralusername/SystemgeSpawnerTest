@@ -26,8 +26,8 @@ func main() {
 		ServerConfig: &Config.TcpServer{
 			Port: 8081,
 		},
-		NodeStatusIntervalMs:                                    1000,
-		NodeSystemgeCounterIntervalMs:                           1000,
+		NodeStatusIntervalMs: 1000,
+		/* 	NodeSystemgeCounterIntervalMs:                           1000,
 		NodeSystemgeInvalidMessageCounterIntervalMs:             1000,
 		NodeSystemgeIncomingConnectionAttemptsCounterIntervalMs: 1000,
 		NodeSystemgeIncomingSyncResponseCounterIntervalMs:       1000,
@@ -38,15 +38,15 @@ func main() {
 		NodeSystemgeOutgoingAsyncMessageCounterIntervalMs:       1000,
 		NodeSystemgeOutgoingSyncResponsesCounterIntervalMs:      1000,
 		NodeWebsocketCounterIntervalMs:                          1000,
-		HeapUpdateIntervalMs:                                    1000,
-		NodeSpawnerCounterIntervalMs:                            1000,
-		NodeHTTPCounterIntervalMs:                               1000,
-		GoroutineUpdateIntervalMs:                               1000,
-		AutoStart:                                               true,
-		AddDashboardToDashboard:                                 true,
+		NodeHTTPCounterIntervalMs:                               1000, */
+		NodeSpawnerCounterIntervalMs: 1000,
+		GoroutineUpdateIntervalMs:    1000,
+		HeapUpdateIntervalMs:         1000,
+		AutoStart:                    true,
+		AddDashboardToDashboard:      true,
 	},
 		Spawner.New(&Config.Spawner{
-			PropagateSpawnedNodeChanges: false,
+			PropagateSpawnedNodeChanges: true,
 			NodeConfig: &Config.Node{
 				Name:              "nodeSpawner",
 				RandomizerSeed:    Tools.GetSystemTime(),
