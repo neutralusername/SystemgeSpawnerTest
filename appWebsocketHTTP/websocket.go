@@ -3,6 +3,7 @@ package appWebsocketHTTP
 import (
 	"SystemgeSpawnerTest/topics"
 	"fmt"
+	"sync/atomic"
 
 	"github.com/neutralusername/Systemge/Config"
 	"github.com/neutralusername/Systemge/Helpers"
@@ -40,7 +41,8 @@ func (app *AppWebsocketHTTP) GetWebsocketMessageHandlers() map[string]Node.Webso
 			return nil
 		},
 		"spawn": func(node *Node.Node, websocketClient *Node.WebsocketClient, message *Message.Message) error {
-			successfulSpawns := 0
+			successfulSpawns := atomic.Uint32{}
+			waitgroup := Tools.NewWaitgroup()
 			for i := 0; i < 1000; i++ {
 				port := app.ports.Add(1)
 				responseChannel, err := node.SyncMessage(Spawner.SPAWN_AND_START_NODE_SYNC, Helpers.JsonMarshal(&Config.NewNode{
@@ -91,24 +93,27 @@ func (app *AppWebsocketHTTP) GetWebsocketMessageHandlers() map[string]Node.Webso
 				if err != nil {
 					continue
 				}
-				response, err := responseChannel.ReceiveResponse()
-				if err != nil {
-					continue
-				}
-				if response.GetTopic() == Message.TOPIC_FAILURE {
-					continue
-				}
-				err = node.ConnectToNode(&Config.TcpEndpoint{
-					Address: "127.0.0.1:" + Helpers.IntToString(int(port)),
-					TlsCert: Helpers.GetFileContent("MyCertificate.crt"),
-					Domain:  "example.com",
+				waitgroup.Add(func() {
+					response, err := responseChannel.ReceiveResponse()
+					if err != nil {
+						return
+					}
+					if response.GetTopic() == Message.TOPIC_FAILURE {
+						return
+					}
+					err = node.ConnectToNode(&Config.TcpEndpoint{
+						Address: "127.0.0.1:" + Helpers.IntToString(int(port)),
+						TlsCert: Helpers.GetFileContent("MyCertificate.crt"),
+						Domain:  "example.com",
+					})
+					if err != nil {
+						panic(err)
+					}
+					successfulSpawns.Add(1)
 				})
-				if err != nil {
-					panic(err)
-				}
-				successfulSpawns++
 			}
-			println("spawned", successfulSpawns, "nodes")
+			waitgroup.Execute()
+			println("spawned", successfulSpawns.Load(), "nodes")
 			return nil
 		},
 		"despawn": func(node *Node.Node, websocketClient *Node.WebsocketClient, message *Message.Message) error {
