@@ -61,7 +61,7 @@ func main() {
 				TcpTimeoutMs:                    5000,
 				MaxConnectionAttempts:           1,
 				ConnectionAttemptDelayMs:        1000,
-				StopAfterOutgoingConnectionLoss: true,
+				StopAfterOutgoingConnectionLoss: false,
 				ServerConfig: &Config.TcpServer{
 					Port:        60001,
 					TlsCertPath: "MyCertificate.crt",
@@ -93,7 +93,7 @@ func main() {
 				TcpTimeoutMs:                    5000,
 				MaxConnectionAttempts:           1,
 				ConnectionAttemptDelayMs:        1000,
-				StopAfterOutgoingConnectionLoss: true,
+				StopAfterOutgoingConnectionLoss: false,
 				ServerConfig: &Config.TcpServer{
 					Port:        60002,
 					TlsCertPath: "MyCertificate.crt",
