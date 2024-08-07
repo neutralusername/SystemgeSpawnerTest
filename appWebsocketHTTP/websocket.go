@@ -19,6 +19,7 @@ func (app *AppWebsocketHTTP) GetWebsocketMessageHandlers() map[string]Node.Webso
 			if err != nil {
 				panic(err)
 			}
+			println("sent async message")
 			return nil
 		},
 		topics.SYNC: func(node *Node.Node, websocketClient *Node.WebsocketClient, message *Message.Message) error {
