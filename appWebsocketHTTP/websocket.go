@@ -77,11 +77,6 @@ func (app *AppWebsocketHTTP) GetWebsocketMessageHandlers() map[string]Node.Webso
 								TlsCert: Helpers.GetFileContent("MyCertificate.crt"),
 								Domain:  "example.com",
 							},
-							{
-								Address: "localhost:60002",
-								TlsCert: Helpers.GetFileContent("MyCertificate.crt"),
-								Domain:  "example.com",
-							},
 						},
 						IncomingMessageByteLimit: 0,
 						MaxPayloadSize:           0,
