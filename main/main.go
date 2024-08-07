@@ -27,7 +27,7 @@ func main() {
 			Port: 8081,
 		},
 		NodeStatusIntervalMs: 1000,
-		/* 	NodeSystemgeCounterIntervalMs:                           1000,
+		/* NodeSystemgeCounterIntervalMs:                           1000,
 		NodeSystemgeInvalidMessageCounterIntervalMs:             1000,
 		NodeSystemgeIncomingConnectionAttemptsCounterIntervalMs: 1000,
 		NodeSystemgeIncomingSyncResponseCounterIntervalMs:       1000,
@@ -46,7 +46,7 @@ func main() {
 		AddDashboardToDashboard:      true,
 	},
 		Spawner.New(&Config.Spawner{
-			PropagateSpawnedNodeChanges: true,
+			PropagateSpawnedNodeChanges: false,
 			NodeConfig: &Config.Node{
 				Name:              "nodeSpawner",
 				RandomizerSeed:    Tools.GetSystemTime(),
@@ -59,7 +59,7 @@ func main() {
 
 				SyncRequestTimeoutMs:            5000,
 				TcpTimeoutMs:                    5000,
-				MaxConnectionAttempts:           1,
+				MaxConnectionAttempts:           2,
 				ConnectionAttemptDelayMs:        1000,
 				StopAfterOutgoingConnectionLoss: false,
 				ServerConfig: &Config.TcpServer{
@@ -91,7 +91,7 @@ func main() {
 
 				SyncRequestTimeoutMs:            5000,
 				TcpTimeoutMs:                    5000,
-				MaxConnectionAttempts:           1,
+				MaxConnectionAttempts:           2,
 				ConnectionAttemptDelayMs:        1000,
 				StopAfterOutgoingConnectionLoss: false,
 				ServerConfig: &Config.TcpServer{
