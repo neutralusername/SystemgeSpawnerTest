@@ -4,6 +4,7 @@ import (
 	"SystemgeSpawnerTest/topics"
 	"fmt"
 	"sync/atomic"
+	"time"
 
 	"github.com/neutralusername/Systemge/Config"
 	"github.com/neutralusername/Systemge/Helpers"
@@ -24,6 +25,7 @@ func (app *AppWebsocketHTTP) GetWebsocketMessageHandlers() map[string]Node.Webso
 			return nil
 		},
 		topics.SYNC: func(node *Node.Node, websocketClient *Node.WebsocketClient, message *Message.Message) error {
+			started := time.Now()
 			if responseChannel, err := node.SyncMessage(topics.SYNC, ""); err != nil {
 				panic(err)
 			} else {
@@ -31,7 +33,7 @@ func (app *AppWebsocketHTTP) GetWebsocketMessageHandlers() map[string]Node.Webso
 				for {
 					_, err := responseChannel.ReceiveResponse()
 					if err != nil {
-						println("received", responseCount, "sync responses")
+						println("received", responseCount, "sync responses", "in", time.Since(started).Milliseconds(), "ms")
 						break
 					} else {
 						responseCount++
@@ -45,6 +47,9 @@ func (app *AppWebsocketHTTP) GetWebsocketMessageHandlers() map[string]Node.Webso
 			waitgroup := Tools.NewWaitgroup()
 			for i := 0; i < 1000; i++ {
 				port := app.ports.Add(1)
+				if port > 65535 {
+					break
+				}
 				responseChannel, err := node.SyncMessage(Spawner.SPAWN_AND_START_NODE_SYNC, Helpers.JsonMarshal(&Config.NewNode{
 					NodeConfig: &Config.Node{
 						Name:              Helpers.Uint32ToString(port),
@@ -58,7 +63,7 @@ func (app *AppWebsocketHTTP) GetWebsocketMessageHandlers() map[string]Node.Webso
 
 						SyncRequestTimeoutMs:            10000,
 						TcpTimeoutMs:                    5000,
-						MaxConnectionAttempts:           0,
+						MaxConnectionAttempts:           1,
 						ConnectionAttemptDelayMs:        1000,
 						StopAfterOutgoingConnectionLoss: true,
 						ServerConfig: &Config.TcpServer{
@@ -123,6 +128,8 @@ func (app *AppWebsocketHTTP) GetWebsocketMessageHandlers() map[string]Node.Webso
 			if response.GetTopic() == Message.TOPIC_FAILURE {
 				return fmt.Errorf(response.GetPayload())
 			}
+			println("despawned all nodes")
+			app.ports.Store(32768)
 			return nil
 		},
 	}

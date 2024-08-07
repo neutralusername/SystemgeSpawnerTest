@@ -8,7 +8,7 @@ type AppWebsocketHTTP struct {
 
 func New() *AppWebsocketHTTP {
 	ports := &atomic.Uint32{}
-	ports.Store(60002)
+	ports.Store(32768)
 	return &AppWebsocketHTTP{
 		ports: ports,
 	}
