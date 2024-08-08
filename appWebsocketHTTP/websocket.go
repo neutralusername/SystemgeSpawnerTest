@@ -78,7 +78,7 @@ func (app *AppWebsocketHTTP) GetWebsocketMessageHandlers() map[string]Node.Webso
 						},
 						EndpointConfigs: []*Config.TcpEndpoint{
 							{
-								Address: "localhost:60001",
+								Address: "localhost:60002",
 								TlsCert: Helpers.GetFileContent("MyCertificate.crt"),
 								Domain:  "example.com",
 							},
@@ -102,10 +102,10 @@ func (app *AppWebsocketHTTP) GetWebsocketMessageHandlers() map[string]Node.Webso
 						return
 					}
 					err = node.ConnectToNode(&Config.TcpEndpoint{
-						Address: "127.0.0.1:" + Helpers.IntToString(int(port)),
+						Address: "localhost:" + Helpers.IntToString(int(port)),
 						TlsCert: Helpers.GetFileContent("MyCertificate.crt"),
 						Domain:  "example.com",
-					})
+					}, true)
 					if err != nil {
 						panic(err)
 					}
