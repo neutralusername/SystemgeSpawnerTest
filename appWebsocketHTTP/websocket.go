@@ -44,7 +44,7 @@ func (app *AppWebsocketHTTP) GetWebsocketMessageHandlers() map[string]Node.Webso
 		},
 		"spawn": func(node *Node.Node, websocketClient *Node.WebsocketClient, message *Message.Message) error {
 			successfulSpawns := atomic.Uint32{}
-			waitgroup := Tools.NewWaitgroup()
+			taskGroup := Tools.NewTaskGroup()
 			for i := 0; i < 1000; i++ {
 				port := app.ports.Add(1)
 				if port > 65535 {
@@ -94,7 +94,7 @@ func (app *AppWebsocketHTTP) GetWebsocketMessageHandlers() map[string]Node.Webso
 				if err != nil {
 					continue
 				}
-				waitgroup.Add(func() {
+				taskGroup.AddTask(func() {
 					response, err := responseChannel.ReceiveResponse()
 					if err != nil {
 						return
@@ -113,7 +113,7 @@ func (app *AppWebsocketHTTP) GetWebsocketMessageHandlers() map[string]Node.Webso
 					successfulSpawns.Add(1)
 				})
 			}
-			waitgroup.Execute()
+			taskGroup.ExecuteTasks()
 			println("spawned", successfulSpawns.Load(), "nodes")
 			return nil
 		},
