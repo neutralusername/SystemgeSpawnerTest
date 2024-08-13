@@ -88,28 +88,6 @@ func main() {
 				RandomizerSeed:  Tools.GetSystemTime(),
 				ErrorLoggerPath: LOGGER_PATH,
 			},
-			SystemgeServerConfig: &Config.SystemgeServer{
-				TcpTimeoutMs: 5000,
-				ProcessMessagesOfEachConnectionSequentially: true,
-				ProcessAllMessagesSequentially:              true,
-				ProcessAllMessagesSequentiallyChannelSize:   10000,
-				ServerConfig: &Config.TcpServer{
-					Port:        60001,
-					TlsCertPath: "MyCertificate.crt",
-					TlsKeyPath:  "MyKey.key",
-				},
-				Endpoint: &Config.TcpEndpoint{
-					Address: "localhost:60001",
-					Domain:  "example.com",
-					TlsCert: Helpers.GetFileContent("MyCertificate.crt"),
-				},
-				TcpBufferBytes:           1024 * 4,
-				IncomingMessageByteLimit: 0,
-				MaxPayloadSize:           0,
-				MaxTopicSize:             0,
-				MaxSyncTokenSize:         0,
-				MaxNodeNameSize:          0,
-			},
 			SystemgeClientConfig: &Config.SystemgeClient{
 				SyncRequestTimeoutMs:            10000,
 				TcpTimeoutMs:                    5000,
